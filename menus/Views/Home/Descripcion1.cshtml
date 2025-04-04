@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <div class="container">
+        <h2>Detalles de @ViewBag.Tipo #@ViewBag.Id</h2>
+
+   
+        @if (ViewBag.Tipo == "actividad")
+        {
+            <div class="alert alert-info">
+                <p>Esta fuela actividad 11</p>
+               
+            </div>
+        }
+        else if (ViewBag.Tipo == "tarea")
+        {
+            <div class="alert alert-success">
+                <p>Esta fue la tarea 9</p>
+              
+            </div>
+        }
+
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Volver al inicio</a>
+    </div>
+}
