@@ -1,0 +1,112 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Pokemon
+
+
+<style>
+   
+    .pokemon-container {
+        margin: 40px auto;
+        max-width: 350px;
+    }
+    
+    .pokemon-card {
+        font-family: 'Arial', sans-serif;
+        background-color: #FFDE00;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 25px;
+        text-align: center;
+        border: 5px solid #B79F00;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .pokemon-card h2 {
+        color: #333;
+        margin-top: 0;
+        font-size: 2.2em;
+        text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    }
+    
+    .pokemon-image {
+        width: 180px;
+        height: 180px;
+        object-fit: contain;
+        background-color: white;
+        border-radius: 50%;
+        padding: 15px;
+        margin: 10px auto;
+        border: 5px solid #B79F00;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .pokemon-details {
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .detail-item {
+        margin: 10px 0;
+        padding: 8px 0;
+        border-bottom: 1px dashed #ddd;
+    }
+    
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+    
+    .type-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        background-color: #FFDE00;
+        color: #333;
+        border-radius: 15px;
+        font-weight: bold;
+        margin: 2px;
+        border: 2px solid #B79F00;
+    }
+
+    .ability-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        background-color: #f8f8f8;
+        color: #333;
+        border-radius: 15px;
+        margin: 2px;
+        border: 1px solid #ddd;
+
+    }
+</style>
+
+<div class="pokemon-container">
+    <div class="pokemon-card">
+        <h2>@Model.Name</h2>
+        <img class="pokemon-image" src="@Model.ImageUrl" alt="@Model.Name" />
+        
+        <div class="pokemon-details">
+            <div class="detail-item">
+                <strong>Tipos:</strong><br>
+                @foreach (var type in Model.Types)
+                {
+                    <span class="type-badge">@type</span>
+                }
+            </div>
+            
+            <div class="detail-item">
+                <strong>Habilidades:</strong><br>
+                @foreach (var ability in Model.Abilities)
+                {
+                    <span class="ability-badge">@ability</span>
+                }
+            </div>
+            
+            <div class="detail-item">
+                <strong>Peso:</strong> @Model.Weight kg
+            </div>
+        </div>
+    </div>
+</div>

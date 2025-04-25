@@ -1,16 +1,59 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using menus.Models;
+using System.Text.Json;
+
 
 namespace menus.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly HttpClient httpClient;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(HttpClient httpClient)
     {
-        _logger = logger;
+        this.httpClient = httpClient;
+    }
+
+    [HttpGet("Home/GetPokemon/{name}")]
+    public async Task<IActionResult> GetPokemon(string name)
+    {
+        String url = $"https://pokeapi.co/api/v2/pokemon/{name}";
+        HttpResponseMessage response =
+             await httpClient.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            return NotFound();
+        }
+        String json = await response
+                           .Content
+                           .ReadAsStringAsync();
+        JsonDocument doc = JsonDocument
+                          .Parse(json);
+        Pokemon pokemon = new Pokemon
+        {
+            Name = doc.RootElement.GetProperty("name").GetString(),
+            ImageUrl = doc
+                   .RootElement
+                   .GetProperty("sprites")
+                   .GetProperty("front_default")
+                   .GetString(),
+            Types = doc.RootElement.GetProperty("types")
+           .EnumerateArray()
+           .Select(t => t.GetProperty("type")
+                       .GetProperty("name")
+                       .GetString())
+                  .ToList(),
+            Abilities = doc.RootElement.GetProperty("abilities")
+                .EnumerateArray()
+                .Select(a => a.GetProperty("ability")
+                              .GetProperty("name")
+                              .GetString())
+                 .ToList(),
+            Weight = doc.RootElement.GetProperty("weight").GetInt32(),
+        };
+
+        return View(pokemon);
     }
 
     public IActionResult Index()
@@ -23,27 +66,19 @@ public class HomeController : Controller
         return View();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    public IActionResult Photos ()
+    public IActionResult Photos()
     {
         return View();
     }
+
     public IActionResult Contact()
     {
         return View();
     }
 
-    public IActionResult Descripcion1(int? id, string tipo)
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
     {
-        // Puedes usar ViewBag o un modelo para pasar datos a la vista
-        ViewBag.Id = id;
-        ViewBag.Tipo = tipo;
-
-        return View();
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
