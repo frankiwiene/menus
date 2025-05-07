@@ -3,10 +3,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
+builder.Services.AddSession();//hola
 
 var app = builder.Build();
 
-builder.Services.AddSession();//hola
+
 
 
 // Configure the HTTP request pipeline.
